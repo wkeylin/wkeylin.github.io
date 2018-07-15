@@ -79,18 +79,23 @@
 
 
 
-<meta name="description" content="王奇林、kirin">
+<meta name="description" content="因为搭建Hadoop需要java，hadoop安装包，还要配置环境变量，如果在虚拟机上搭建，每台虚拟机都得相同的配置，重复的工作是程序猿最不想干的。所以docker的优点就显现出来了。">
 <meta name="keywords" content="docker,Hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker配置Hadoop集群">
 <meta property="og:url" content="https://blog.keyling.cn/2018/07/15/docker配置Hadoop集群/index.html">
 <meta property="og:site_name" content="Kirin">
-<meta property="og:description" content="王奇林、kirin">
+<meta property="og:description" content="因为搭建Hadoop需要java，hadoop安装包，还要配置环境变量，如果在虚拟机上搭建，每台虚拟机都得相同的配置，重复的工作是程序猿最不想干的。所以docker的优点就显现出来了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-15T02:52:10.306Z">
+<meta property="og:image" content="https://blog.keyling.cn/2018/07/15/docker配置Hadoop集群/5.png">
+<meta property="og:image" content="https://blog.keyling.cn/2018/07/15/docker配置Hadoop集群/6.png">
+<meta property="og:image" content="https://blog.keyling.cn/2018/07/15/docker配置Hadoop集群/6.png">
+<meta property="og:image" content="https://blog.keyling.cn/2018/07/15/docker配置Hadoop集群/7.png">
+<meta property="og:updated_time" content="2018-07-15T09:18:45.351Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker配置Hadoop集群">
-<meta name="twitter:description" content="王奇林、kirin">
+<meta name="twitter:description" content="因为搭建Hadoop需要java，hadoop安装包，还要配置环境变量，如果在虚拟机上搭建，每台虚拟机都得相同的配置，重复的工作是程序猿最不想干的。所以docker的优点就显现出来了。">
+<meta name="twitter:image" content="https://blog.keyling.cn/2018/07/15/docker配置Hadoop集群/5.png">
 
 
 
@@ -310,7 +315,25 @@
       
 
       
-        
+        <p>因为搭建Hadoop需要java，hadoop安装包，还要配置环境变量，如果在虚拟机上搭建，每台虚拟机都得相同的配置，重复的工作是程序猿最不想干的。所以docker的优点就显现出来了。<br><a id="more"></a></p>
+<h2 id="获取镜像"><a href="#获取镜像" class="headerlink" title="获取镜像"></a>获取镜像</h2><p>为了避免重复的工作，那么就把别人的一些基础环境配置好的镜像用来创建容器。我采用阿里云仓库中一个已经配置好的镜像  </p>
+<p>镜像拉取到本地：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取镜像</span></span><br><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/kaibb/hadoop</span><br><span class="line"><span class="comment"># 查看镜像</span></span><br><span class="line">docker images</span><br></pre></td></tr></table></figure></p>
+<h2 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h2><p>必须有一个容器作为Hadoop集群的namenode，其他容器作为datanode<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建master的容器作为namenode(-p 参数 是docker容器中的端口映射到本地)</span></span><br><span class="line">docker run -i -t --name master -h master -p 50070:50070 registry.cn-hangzhou.aliyuncs.com/kaibb/hadoop /bin/bash</span><br><span class="line"><span class="comment"># 创建slave1的容器作为datanode</span></span><br><span class="line">docker run -i -t --name slave1 -h slave1 registry.cn-hangzhou.aliyuncs.com/kaibb/hadoop /bin/bash</span><br><span class="line"><span class="comment"># 其他datanode创建一样</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="配置SSH"><a href="#配置SSH" class="headerlink" title="配置SSH"></a>配置SSH</h2><p>因为docker的便捷性，原来需要搭建的java环境、hadoop安装包已经不需要搭建了，所以直接配置SSH就欧了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 运行SSH</span></span><br><span class="line">/etc/init.d/ssh start</span><br><span class="line"><span class="comment"># 生成密钥，保存到authorized_keys中</span></span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line">cat id_rsa.pub &gt; authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>然后其他节点做一样的事(这个就只能重复操作了,-_-|)  </p>
+<p>然后为了能够各个节点都能连通，还得配置hosts，ip地址可以通过前文提到的portainer界面进行查看，也可以通过相关linux命令查看<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br></pre></td></tr></table></figure></p>
+<img src="/2018/07/15/docker配置Hadoop集群/5.png" title="配置hosts">
+<p>配置完成后，可以通过ssh 容器名称 进行连接  </p>
+<h2 id="配置hadoop"><a href="#配置hadoop" class="headerlink" title="配置hadoop"></a>配置hadoop</h2><p>配置hadoop就可以利用docker的便捷性，先在master节点配置好后，把修改过的文件利用scp命令发送到其他节点然后覆盖原来的配置。<br>配置相关文件的目录在 /opt/tools/hadoop/etc/hadoop/<br>core.site.xml<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://master:8000&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">  &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/hadoop/tmp&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>hdfs-site.xml<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/hadoop/data&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/hadoop/name&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>mapred-site.xml<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>yarn-site.xml<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;master:8032&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;master:8030&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;master:8031&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;master:8033&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;master:8088&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.nodemanager.aux-services.mapreduce.shuffle.class&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;org.apache.hadoop.mapred.ShuffleHandler&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后把这些修改后的文件通过scp发送到slave各个节点上覆盖原来的文件，以slave1为例<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp core-site.xml hadoop-env.sh hdfs-site.xml mapred-site.xml yarn-site.xml slave1:/opt/tools/hadoop/etc/hadoop/</span><br></pre></td></tr></table></figure></p>
+<p>然后在slaves文件上配置其他节点，也是在/opt/tools/hadoop/etc/hadoop/目录下的slaves文件<br><img src="/2018/07/15/docker配置Hadoop集群/6.png" title="添加其他节点"></p>
+<h2 id="运行hadoop"><a href="#运行hadoop" class="headerlink" title="运行hadoop"></a>运行hadoop</h2><p>进行格式化操作<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop namenode -format</span><br></pre></td></tr></table></figure></p>
+<p>启动集群：使用./start-all.sh 目录在/opt/tools/hadoop/sbin<br>在各个节点使用jps查看相关进程是否启动<br><img src="/2018/07/15/docker配置Hadoop集群/6.png" title="master节点状态"><br><img src="/2018/07/15/docker配置Hadoop集群/7.png" title="slave1节点状态"></p>
+<p>hadoop集群已经搭建完成</p>
+
       
     </div>
     
@@ -402,8 +425,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -454,6 +486,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取镜像"><span class="nav-number">1.</span> <span class="nav-text">获取镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建容器"><span class="nav-number">2.</span> <span class="nav-text">创建容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSH"><span class="nav-number">3.</span> <span class="nav-text">配置SSH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置hadoop"><span class="nav-number">4.</span> <span class="nav-text">配置hadoop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行hadoop"><span class="nav-number">5.</span> <span class="nav-text">运行hadoop</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -535,6 +583,9 @@
 
 
 
+  
+  
+
 
 
 
@@ -571,6 +622,16 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
   
 
 
