@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="docker," />
 
 
 
@@ -79,16 +79,23 @@
 
 
 
-<meta name="description" content="王奇林、kirin">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Kirin">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="因为小学期是大数据培训，需要安装配置Hadoop，最近Docker比较火，所以打算尝试一下。">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows docker 环境搭建">
+<meta property="og:url" content="http://yoursite.com/2018/07/15/Windows-docker-环境搭建/index.html">
 <meta property="og:site_name" content="Kirin">
-<meta property="og:description" content="王奇林、kirin">
+<meta property="og:description" content="因为小学期是大数据培训，需要安装配置Hadoop，最近Docker比较火，所以打算尝试一下。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/07/15/Windows-docker-环境搭建/2.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/15/Windows-docker-环境搭建/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/15/Windows-docker-环境搭建/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/07/15/Windows-docker-环境搭建/4.png">
+<meta property="og:updated_time" content="2018-07-15T02:37:25.868Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kirin">
-<meta name="twitter:description" content="王奇林、kirin">
+<meta name="twitter:title" content="Windows docker 环境搭建">
+<meta name="twitter:description" content="因为小学期是大数据培训，需要安装配置Hadoop，最近Docker比较火，所以打算尝试一下。">
+<meta name="twitter:image" content="http://yoursite.com/2018/07/15/Windows-docker-环境搭建/2.png">
 
 
 
@@ -118,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/15/Windows-docker-环境搭建/"/>
 
 
 
 
 
-  <title>Kirin</title>
+  <title>Windows docker 环境搭建 | Kirin</title>
   
 
 
@@ -143,8 +150,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,9 +233,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -259,9 +265,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/15/Windows-docker-环境搭建/" itemprop="url">Windows docker 环境搭建</a></h1>
+          <h1 class="post-title" itemprop="name headline">Windows docker 环境搭建</h1>
         
 
         <div class="post-meta">
@@ -273,7 +277,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-14T17:02:40Z">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-15T01:02:40+08:00">
                 2018-07-14
               </time>
             
@@ -311,16 +315,29 @@
       
 
       
-        
-          <p>因为小学期是大数据培训，需要安装配置Hadoop，最近Docker比较火，所以打算尝试一下。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/07/15/Windows-docker-环境搭建/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <p>因为小学期是大数据培训，需要安装配置Hadoop，最近Docker比较火，所以打算尝试一下。</p>
+<a id="more"></a>
+<h2 id="什么是Docker"><a href="#什么是Docker" class="headerlink" title="什么是Docker"></a>什么是Docker</h2><p>先说一下什么是Linux容器吧，虚拟机因为资源占用多、启动慢等原因，但是虚拟机还原的是整个软件的原始环境，无法轻松应用于各个宿主机，所以Linux容器诞生了。Linux不是模拟的完整的操作系统，而是对线程的隔离（在正常的线程外套了一层保护壳），里面的进程访问的各个资源都是虚拟的，隔离了底层的系统。  </p>
+<p>Docker属于Linux容器的封装，提供简单易用的容器使用接口；Docker的操作其实和代码管理Git比较相似，用户可以方便的创建和使用容器，把自己的应用放入容器。容器还可以进行版本管理、复制、分享、修改。</p>
+<h2 id="Docker用途"><a href="#Docker用途" class="headerlink" title="Docker用途"></a>Docker用途</h2><ol>
+<li>提供一次性环境。比如，本地测试他人的软件、持续集成的时候提供单元测试和构件环境。</li>
+<li>提供弹性的云服务。Docker 容器可以随开虽关，很适合动态扩容和缩容。</li>
+<li>组件微服务架构。通过多个容器，一台机器可以跑多个服务，因此在本机可以模拟出微服务架构  </li>
+</ol>
+<h2 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h2><p>本次试水的是windows上docker安装和应用，Linux以后有机会再尝试  </p>
+<ol>
+<li>在<a href="https://store.docker.com/editions/community/docker-ce-desktop-windows" target="_blank" rel="noopener">docker store</a>中下载相应的windows版本安装 </li>
+<li>启用windows中Hyper-V功能，并且进入BIOS打开虚拟化<img src="/2018/07/15/Windows-docker-环境搭建/2.png" title="打开Hyper-V功能"></li>
+<li>docker for windows 安装，一路默认安装就可以，安装完成。<br>成功后托盘里有一个鲸鱼图标，安装过程并未遇到任何坑<br>并且可以用一些命令验证是否安装成功  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br><span class="line">docker info</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Docekr配置"><a href="#Docekr配置" class="headerlink" title="Docekr配置"></a>Docekr配置</h2><ol>
+<li>配置国内镜像仓库 <a href="https://registry.docker-cn.com" target="_blank" rel="noopener">https://registry.docker-cn.com</a><br>右键鲸鱼图标-设置-Daemon-Registry mirrors  <img src="/2018/07/15/Windows-docker-环境搭建/3.png" title="配置国内镜像仓库"></li>
+<li>其他配置有需要会再更新  </li>
+</ol>
+<h2 id="Docker常用命令"><a href="#Docker常用命令" class="headerlink" title="Docker常用命令"></a>Docker常用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取镜像文件到本地</span></span><br><span class="line">docker image pull 仓库/image名称</span><br><span class="line"><span class="comment"># 列出本机所有镜像文件</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># 以镜像文件创建实例（容器）并进行端口映射</span></span><br><span class="line">docker run -i -t -p 容器端口:本地端口 --name 名称 镜像 /bin/bash </span><br><span class="line"><span class="comment"># 列出本机所有容器信息</span></span><br><span class="line">docker ps -a</span><br><span class="line"><span class="comment"># 进入运行中的容器</span></span><br><span class="line">docker attach 容器名称</span><br><span class="line"><span class="comment"># 退出容器命令行</span></span><br><span class="line">Ctrl+P+Q</span><br></pre></td></tr></table></figure>
+<h2 id="Portainer"><a href="#Portainer" class="headerlink" title="Portainer"></a>Portainer</h2><p>另外安利一个docker可视化的界面开源项目——<a href="https://portainer.io/" target="_blank" rel="noopener">Portainer</a><br>可以对docker 的镜像、容器进行状态管理和命令行操作，功能涉及到很多常用的命令，可以减少很多的命令行操作<br>具体的安装及操作官网都很详细，安装<a href="https://portainer.io/install.html" target="_blank" rel="noopener">点此访问</a><br><img src="/2018/07/15/Windows-docker-环境搭建/1.png" title="portainer管理界面"><br><img src="/2018/07/15/Windows-docker-环境搭建/4.png" title="portainer管理界面"></p>
+
       
     </div>
     
@@ -335,14 +352,20 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+        </div>
+      
+
+      
+      
+      
 
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -352,10 +375,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -363,6 +387,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -383,8 +411,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -435,6 +472,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Docker"><span class="nav-number">1.</span> <span class="nav-text">什么是Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker用途"><span class="nav-number">2.</span> <span class="nav-text">Docker用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker安装"><span class="nav-number">3.</span> <span class="nav-text">Docker安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docekr配置"><span class="nav-number">4.</span> <span class="nav-text">Docekr配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker常用命令"><span class="nav-number">5.</span> <span class="nav-text">Docker常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Portainer"><span class="nav-number">6.</span> <span class="nav-text">Portainer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -575,6 +628,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
